@@ -12,4 +12,10 @@ class Dashboard extends Controller
     {
         return view('dashboard.index');
     }
+
+    public function preprocessing(Request $request)
+    {
+        $feedback = array();
+        return response()->json($feedback, 200, array(), JSON_PRETTY_PRINT);
+    }
 }
