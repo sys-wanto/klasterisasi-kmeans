@@ -25,9 +25,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Pre Processing Output</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
@@ -49,13 +46,35 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         id="preprocessingModalClose">Close</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="tfIdfModal" tabindex="-1" role="dialog" aria-labelledby="tfIdfModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">TF-IDF Output</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="table-tfIdf">
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        id="tfIdfModalClose">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <div class="h-100 d-flex align-items-center justify-content-center">
         <div class="border p-2  w-25">
@@ -74,19 +93,19 @@
                                         id="preprocessing">PRE-PROCESSING</button>
                                 </div>
                                 <div class="col w-100 m-2">
-                                    <button type="button" name="kmeans" class="btn btn-primary w-100"
-                                        id="kmeans">K-MEANS</button>
+                                    <button type="button" name="naivebayes" class="btn btn-primary w-100" disabled=true
+                                        id="naivebayes">NAIVE BAYES</button>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 m-2">
                             <div class="row">
                                 <div class="col w-50 m-2">
-                                    <button type="button" name="tfidf" class="btn btn-primary w-100"
+                                    <button type="button" name="tfidf" class="btn btn-primary w-100" disabled=true
                                         id="tfidf">TF-IDF</button>
                                 </div>
                                 <div class="col w-50 m-2">
-                                    <button type="button" name="evaluasi" class="btn btn-primary w-100"
+                                    <button type="button" name="evaluasi" class="btn btn-primary w-100" disabled=true
                                         id="evaluasi">EVALUASI</button>
                                 </div>
                             </div>
@@ -94,7 +113,7 @@
                         <div class="col-12 m-2">
                             <div class="row">
                                 <div class="col w-50 m-2">
-                                    <button type="button" name="hasil" class="btn btn-primary w-100"
+                                    <button type="button" name="hasil" class="btn btn-primary w-100" disabled=true
                                         id="hasil">HASIL</button>
                                 </div>
                             </div>
@@ -116,81 +135,7 @@
         integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous">
     </script>
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js"></script>
-    <script type="text/javascript">
-        $('#preprocessingModalClose').click(function() {
-            $('#preprocessingModal').modal('hide');
-        })
-        $('#preprocessing').click(function() {
-            var kronologi = $('textarea#kronologi').val();
-            var splited = kronologi.split('\n');
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:5000/preprocessing",
-                data: {
-                    q: splited
-                },
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                },
-                success: callbackFunc
-            });
-        });
-
-        $('#tfidf').click(function() {
-            var kronologi = $('textarea#kronologi').val();
-            var splited = kronologi.split('\n');
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:5000/tfidf",
-                data: {
-                    q: splited
-                },
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                },
-                success: callbackFunc
-            });
-        });
-
-        function callbackFunc(response) {
-            iKey = 1;
-            iSetelah = 0;
-            console.log(response['data']);
-            $('#preprocessingModal').modal('show')
-            $('#table-preprocessing').DataTable({
-                "autoWidth": false,
-                "data": response['data']['q'],
-                "iDisplayLength": 10,
-                "paging": false,
-                "searching": false,
-                "ordering": false,
-                "columns": [{
-                        "data": "KEY",
-                        "render": function(value, type, row, meta) {
-                            return `q${iKey++}`;
-                        }
-                    },
-                    {
-                        "data": "SEBELUM",
-                        "render": function(value, type, row, meta) {
-                            return row;
-                        }
-                    },
-                    {
-                        "data": "SETELAH",
-                        "render": function(value, type, row, meta) {
-                            // console.log(`response q${iSetelah}}` + response['data']['hasil'][
-                            //     `q${iSetelah}`
-                            // ]);
-
-                            // iSetelah++
-                            return Object.keys(response['data']['hasil'][`q${iSetelah++}`]).join(', ');
-                        }
-                    },
-                ]
-            });
-        }
-    </script>
+    <script src="{{ url('/assets/js/main.js') }}"></script>
 </body>
 
 </html>
